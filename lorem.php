@@ -20,7 +20,8 @@
         $q = $db->prepare("SELECT post.id, post.imgUrl, post.title, 
                                     post.timestamp, user.email 
                             FROM `post` 
-                            INNER JOIN user ON post.author = user.ID;");
+                            INNER JOIN user ON post.author = user.ID;
+                            ORDER BY post.timestamp DESC;");
         //wywołaj kwerendę
         $q->execute();
         //pobierz dane
