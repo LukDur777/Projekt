@@ -29,7 +29,7 @@ if(!empty($_POST)) {
 
     //dopisz posta do bazy
     //tymczasowo = authorID
-    $authorID = 1;
+    $authorID. = 1;
 
     $imageUrl = "localhost/lorem/img/" . $fileName;
 
