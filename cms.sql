@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 19, 2024 at 01:12 PM
+-- Generation Time: Mar 04, 2024 at 01:05 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `lorem`
+-- Database: `cms`
 --
 
 -- --------------------------------------------------------
@@ -29,10 +29,10 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `comment` (
   `ID` int(11) NOT NULL,
-  `user` int(11) NOT NULL,
-  `post` int(11) NOT NULL,
+  `user` varchar(128) NOT NULL,
+  `post` varchar(128) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `content` text NOT NULL
+  `content` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -43,9 +43,9 @@ CREATE TABLE `comment` (
 
 CREATE TABLE `like` (
   `ID` int(11) NOT NULL,
-  `post` int(11) NOT NULL,
-  `user` int(11) NOT NULL,
-  `score` int(11) NOT NULL
+  `post` varchar(128) NOT NULL,
+  `user` varchar(128) NOT NULL,
+  `score` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -56,11 +56,18 @@ CREATE TABLE `like` (
 
 CREATE TABLE `post` (
   `ID` int(11) NOT NULL,
-  `author` int(11) NOT NULL,
+  `author` varchar(128) NOT NULL,
   `imgUrl` varchar(128) NOT NULL,
   `title` varchar(128) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `post`
+--
+
+INSERT INTO `post` (`ID`, `author`, `imgUrl`, `title`, `timestamp`) VALUES
+(0, '1', 'http://localhost/cms/img/752819d1dc37a8d0ff9a94ffbb125696cacb215f789cda9cb3ada15065cee9aa.webp', '123', '2024-03-04 11:36:28');
 
 -- --------------------------------------------------------
 
@@ -75,6 +82,13 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`ID`, `login`, `password`) VALUES
+(1, '[Jan]', '123');
+
+--
 -- Indeksy dla zrzutów tabel
 --
 
@@ -82,19 +96,13 @@ CREATE TABLE `user` (
 -- Indeksy dla tabeli `comment`
 --
 ALTER TABLE `comment`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `post` (`post`),
-  ADD KEY `user` (`user`);
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indeksy dla tabeli `like`
 --
 ALTER TABLE `like`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `post` (`post`),
-  ADD KEY `user` (`user`),
-  ADD KEY `post_2` (`post`),
-  ADD KEY `user_2` (`user`);
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indeksy dla tabeli `post`
@@ -106,25 +114,17 @@ ALTER TABLE `post`
 -- Indeksy dla tabeli `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID` (`ID`);
+  ADD PRIMARY KEY (`ID`);
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- Constraints for table `comment`
---
-ALTER TABLE `comment`
-  ADD CONSTRAINT `post` FOREIGN KEY (`post`) REFERENCES `comment` (`ID`) ON UPDATE CASCADE;
-
---
--- Constraints for table `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  ADD CONSTRAINT `author` FOREIGN KEY (`ID`) REFERENCES `post` (`ID`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `user` FOREIGN KEY (`ID`) REFERENCES `comment` (`ID`) ON UPDATE CASCADE;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
