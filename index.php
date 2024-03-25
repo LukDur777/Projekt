@@ -39,11 +39,24 @@ if(isset($_REQUEST['email']) && isset($_REQUEST['password']) ) {
 
 
 ?>
-
-<form action="index.php" method="get">
+<h1>Zaloguj sie</h1>
+<form action="index.php" method="post">
     <label for="emailInput">Login:</label>
     <input type="email" name="email" id="emailInput">
     <label for="passwordInput">Hasło:</label>
     <input type="password" name="password" id="passwordInput">
-    <input type="submit" value="zaloguj">
+    <input type="hidden"  name="action" value="login" >
+    <input type="submit" value="Zaloguj">
+</form>
+<h2>zarejestruj sie </h2>
+<form action="index.php" method="post">
+    <label for="emailInput">Email</label>
+    <input type="email" name="email" id="emailInput">
+    <label for="passwordInput">Haslo:</label>
+    <input type="password" name="password" id="passwordInput">
+    <label for="passwordRepeat">Haslo ponownie:</label>
+    <input type="password" name="password" id="passwordRepeat">
+    <input type="hidden"  name="action" value="Register" >
+    <input type="submit" value="Zaloguj">
+    
 </form>
