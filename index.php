@@ -1,5 +1,5 @@
 <?php
-if(isset($_REQUEST['email']) && isset($_REQUEST['password']) ) {
+if(isset($_REQUEST['action']) && $_REQUEST['action'] == "login") {
     $email = $_REQUEST['email'];
     $password = $_REQUEST['password'];
     
@@ -31,7 +31,25 @@ if(isset($_REQUEST['email']) && isset($_REQUEST['password']) ) {
         }
     }
 }
-
+if(isset($_REQUEST['action']) && $_REQUEST['action'] == "register"){
+    $db = new mysqli("localhost", "root", "", "cms");
+    $email = $_REQUEST['email'];
+    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+    $password = $_REQUEST['password'];
+    $passwordRepeat = $_REQUEST['password'];
+    if($password = $passwordRepeat){
+    $q = $db->prepare("INSERT INTO user VALUES (NULL, ?, ?)");
+    $q->bind_param("ss", $email, $password);
+    $result = $q->execute();
+    if($result){
+        echo "Konto utworzone poprawnie";
+    } else {
+        echo "Nie udalo sie";
+    }
+    } else {
+        echo "Hasła nie sa identyczne";
+    }
+}
 
 
 
