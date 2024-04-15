@@ -12,7 +12,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == "login") {
 
     $result = User::Login($email,$password);
         if($result){
-        echo "Konto utworzone poprawnie";
+        echo "zalogowano poprawnie";
     } else {
         echo "Nie udalo sie";
     }
@@ -79,7 +79,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == "login") {
     <input type="hidden"  name="action" value="login" >
     <input type="submit" value="Zaloguj">
 </form>
-<h2>zarejestruj sie </h2>
+<!-- <h2>zarejestruj sie </h2>
 <form action="index.php" method="post">
     <label for="emailInput">Email</label>
     <input type="email" name="email" id="emailInput">
@@ -89,5 +89,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == "login") {
     <input type="password" name="password" id="passwordRepeatInput">
     <input type="hidden"  name="action" value="register" >
     <input type="submit" value="Zarejestruj">
-    
+     -->
+    <a class="btn" href="register.php">
+Przejdz Do rejestracji</a>
 </form>

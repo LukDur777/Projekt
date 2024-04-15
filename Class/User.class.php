@@ -20,7 +20,7 @@ class User {
         //funkcja rejestruje nowego użytkownika do bazy
         //funkcja zwraca true jesli sie udalo lub false jesli sie nie udalo
         $db = new mysqli('localhost', 'root', '', 'cms');
-        $sql = "INSERT INTO user (email, password) VALUES (?, ?)";
+        $sql = "INSERT INTO user (email, passwordHash) VALUES (?, ?)";
         $q = $db->prepare($sql);
         $passwordHash = password_hash($password, PASSWORD_ARGON2I);
         $q->bind_param("ss", $email, $passwordHash);

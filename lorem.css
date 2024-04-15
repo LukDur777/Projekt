@@ -32,3 +32,6 @@ span.post-score {
 span.post-score {
     text-align: right;
 }
+.btn {
+    padding-top: 20px;
+}
