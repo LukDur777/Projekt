@@ -4,11 +4,10 @@ body {
 }
 header {
     background-color: lightgray;
-    margin-bottom: 10vh;
     text-align: center;
     padding: 10px;
 }
-    
+
 
 div.post-block {
     width: 50vw;
@@ -31,7 +30,4 @@ span.post-score {
 }
 span.post-score {
     text-align: right;
-}
-.btn {
-    padding-top: 20px;
 }

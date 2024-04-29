@@ -1,26 +1,30 @@
 <?php
 class User {
-    //włascwosci  klasy User czyli co uxytkownik MA
+    //właściwości klasy User czyli "co użytkownik MA"
     private $id;
     private $email;
     private $password;
 
-    //metody klasy User czyli co użytkownik ROBI
+    //metody klasy User czyli "co użytkownik ROBI"
 
     //konstruktor
     public function __construct(int $id, string $email)
     {
-        //this oznacza tworzony wlasnie obiekt lub instancję klasy do ktorej sir odnosimy
+        //this oznacza tworzony właśnie obiekt lub instancję klasy do której się odnosimy
         $this->id = $id;
         $this->email = $email;
+    }
+    //getery:
+    public function getEmail() : string {
+        return $this->email;
     }
 
 
     public static function Register(string $email, string $password) : bool {
-        //funkcja rejestruje nowego użytkownika do bazy
-        //funkcja zwraca true jesli sie udalo lub false jesli sie nie udalo
+        //funkcja rejestruje nowego użytkownika do bazy danych....
+        //funkcja zwraca true jeśli się udało lub false jeśli się nie udało
         $db = new mysqli('localhost', 'root', '', 'cms');
-        $sql = "INSERT INTO user (email, passwordHash) VALUES (?, ?)";
+        $sql = "INSERT INTO user (email, password) VALUES (?, ?)";
         $q = $db->prepare($sql);
         $passwordHash = password_hash($password, PASSWORD_ARGON2I);
         $q->bind_param("ss", $email, $passwordHash);
@@ -28,9 +32,9 @@ class User {
         return $result;
     }
     public static function Login(string $email, string $password) : bool {
-        //funkcja loguje istniejacego uzytkownika do bazy
-        //funkcja zapisuje uzytkownika do sesji i zwraca true jeśli uzytkownik istnieje
-        //funkcja zwraca false jeśli uzytkownik o takim hasle nie istnieje
+        //funkcja loguje istniejacego uzytkownika do bazy danych...
+        //funkcja zapisuje użytkownika do sesji i zwraca true jeśli użytkownik istnieje
+        //funkcja zwraca false jeśli użytkownik o takim haśle nie istnieje
         $db = new mysqli('localhost', 'root', '', 'cms');
         $sql = "SELECT * FROM user WHERE email = ? LIMIT 1";
         $q = $db->prepare($sql);
@@ -40,7 +44,7 @@ class User {
         $row = $result->fetch_assoc();
         //tu muszą się nazwy w nawiasach [] zgadzać z nazwą kolumny w bazie danych
         $id = $row['ID'];
-        $passwordHash = $row['passwordHash'];
+        $passwordHash = $row['password'];
         if(password_verify($password, $passwordHash)) {
             //hasło się zgadza
             //zapisz dane użytkownika do sesji
@@ -52,10 +56,17 @@ class User {
             return false;
         }
     }
+    public static function isLogged() {
+        if(isset($_SESSION['user']))
+            return true;
+        else 
+            return false;
+    }
     public function Logout() {
         //funkcja wylogowuje użytkownika
-
+        session_destroy();
     }
+    
 }
 
 ?>
