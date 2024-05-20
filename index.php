@@ -1,95 +1,87 @@
 <?php
+require_once("class/User.class.php");
+require_once("class/Post.class.php");
 session_start();
-require("./class/User.class.php");
 ?>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+        rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Nagłowek strony</h1>
+    </header>
+    <div id="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between px-3">
+            <a class="navbar-brand">Nawigacja</a>
+            <?php if(User::isLogged()) : ?>
+                <!-- zalogowany -->
+                <a href="profile.php">
+                    <button class="btn btn-primary">
+                        <i class="fa-solid fa-user"></i> Profil
+                    </button>
+                </a>
+            <?php else: ?>
+                <!-- nie zalogowany -->
+                <a href="login.php">
+                    <button class="btn btn-primary">
+                        <i class="fa-solid fa-user"></i> Zaloguj się
+                    </button>
+                </a>
+            <?php endif; ?>  
+        </nav>
+        <?php
+        $postList = Post::GetPosts();
+        foreach ($postList as $post) {
+            //iterujemy przez tablicę postów
+            echo '<div class="post-block">';
+            echo '<h2 class="post-title">'.$post->GetTitle().'</h3>';
+            echo '<h3 class="post-author">'.$post->GetAuthor().'</h6>';
+            echo '<h3 class="post-author">'.$post->GetAuthorEmail().'</h6>';
+            echo '<img src="'.$post->GetImageURL().'" alt="obrazek posta" class="post-image">';
+            echo '<div class="post-footer">
+                <span class="post-meta">'.$post->GetTimestamp().'</span>
+                <span class="post-score">TODO: punkty</span>
+                </div>';
+            echo '</div>'; //post-block
+        }
 
-<?php
-if(isset($_REQUEST['action']) && $_REQUEST['action'] == "login") {
-    $email = $_REQUEST['email'];
-    $password = $_REQUEST['password'];
-    
-    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
-    $result = User::Login($email,$password);
-        if($result){
-        echo "zalogowano poprawnie";
-    } else {
-        echo "Nie udalo sie";
-    }
-}
-//     $db = new mysqli("localhost", "root", "", "cms");
-    
-//     //$q = "SELECT * FROM user WHERE email = '$email";
-//     //echo $q;
-//     $q = $db->prepare("SELECT * FROM user WHERE email = ? LIMIT 1");
-    
-//     $q->bind_param("s", $email);
-    
-//     $q ->execute();
-    
-//     $result = $q->get_result();
-    
-//     $userRow = $result->fetch_assoc();
-    
-//     if($userRow == null){
-//         echo "Nie istnieje <br>";
-//     } else {
-//         if(password_verify($password, $userRow['passwordHash'])) {
+        // while($row = $result->fetch_assoc()) {
+        //     //$row to jeden wiersz z bazy danych
+        //     echo '<div class="post-block">';
+        //     echo '<h2 class="post-title">'.$row['title'].'</h3>';
+        //     echo '<h3 class="post-author">'.$row['email'].'</h6>';
+        //     echo '<img src="'.$row['imgUrl'].'" alt="obrazek posta" class="post-image">';
+        //     echo '<p class="post-description">TODO: Opis posta</p>';
+        //     echo '<div class="post-footer">
+        //         <span class="post-meta">'.$row['timestamp'].'</span>
+        //         <span class="post-score">TODO: punkty</span>
+        //         </div>';
+        //     echo '</div>'; //post-block
+        // }
+        ?>
+
+        <!--<div class="post-block">
+            <h2 class="post-title">Tytuł posta</h3>
+            <h3 class="post-author">Autor posta</h6>
+            <img src="https://picsum.photos/800/600" alt="obrazek posta" class="post-image">
+            <p class="post-description">Opis posta</p>
+            <div class="post-footer">
+                <span class="post-meta">Data i czas</span>
+                <span class="post-score">+ i -</span>
+            </div>
             
-//             echo "Zalogowano pomyslnie <br>";
-    
-//         } else {
-//             echo "Błędny login lub haslo <br>";
-//         }
-//     }
-// }
-// if(isset($_REQUEST['action']) && $_REQUEST['action'] == "register"){
-//     $db = new mysqli("localhost", "root", "", "cms");
-//     $email = $_REQUEST['email'];
-//     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-//     $password = $_REQUEST['password'];
-//     $passwordRepeat = $_REQUEST['password'];
-//     if($password = $passwordRepeat){
-//     $q = $db->prepare("INSERT INTO user VALUES (NULL, ?, ?)");
-//     $passwordHash = password_hash($password, PASSWORD_ARGON2I);
-//     $q->bind_param("ss", $email, $passwordHash);
-//     $result = $q->execute();
-//     if($result){
-//         echo "Konto utworzone poprawnie";
-//     } else {
-//         echo "Nie udalo sie";
-//     }
-//     } else {
-//         echo "Hasła nie sa identyczne";
-//     }
-// }
-
-
-
-
-
-
-?>
-<h1>Zaloguj sie</h1>
-<form action="index.php" method="post">
-    <label for="emailInput">Login:</label>
-    <input type="email" name="email" id="emailInput">
-    <label for="passwordInput">Hasło:</label>
-    <input type="password" name="password" id="passwordInput">
-    <input type="hidden"  name="action" value="login" >
-    <input type="submit" value="Zaloguj">
-</form>
-<!-- <h2>zarejestruj sie </h2>
-<form action="index.php" method="post">
-    <label for="emailInput">Email</label>
-    <input type="email" name="email" id="emailInput">
-    <label for="passwordInput">Haslo:</label>
-    <input type="password" name="password" id="passwordInput">
-    <label for="passwordRepeatInput">Haslo ponownie:</label>
-    <input type="password" name="password" id="passwordRepeatInput">
-    <input type="hidden"  name="action" value="register" >
-    <input type="submit" value="Zarejestruj">
-     -->
-    <a class="btn" href="register.php">
-Przejdz Do rejestracji</a>
-</form>
+        </div>
+    -->
+    </div>
+    <script src="https://kit.fontawesome.com/4f765d06bb.js" crossorigin="anonymous"></script>
+</body>
+</html>
